@@ -1,0 +1,9 @@
+name: beecrowd
+on: push
+
+jobs:
+    icanc:
+        name: icanc
+        uses: ./.github/workflows/icanc.yaml
+        with:
+            judge: beecrowd

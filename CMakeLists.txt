@@ -4,4 +4,10 @@ project("leet")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 add_subdirectory("include")
-add_subdirectory("docs")
+
+if(NOT DEFINED ENV{NO_DOCS})
+    add_subdirectory("docs")
+endif()
+
+enable_testing()
+add_subdirectory("tests")

@@ -35,7 +35,7 @@ def configure_doxyfile(input_dir, output_dir):
         filedata = file.read()
     filedata = filedata.replace('@DOXYGEN_INPUT_DIR@', input_dir)
     filedata = filedata.replace('@DOXYGEN_OUTPUT_DIR@', output_dir)
-    
+
     with open('Doxyfile', 'w') as file:
         file.write(filedata)
 

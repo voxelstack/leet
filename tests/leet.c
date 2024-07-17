@@ -1,7 +1,8 @@
 #include <icanc.h>
 #include <string.h>
 
-int main()
+int
+main()
 {
-    return strcmp("leet", PROJECT);
+        return strcmp("leet", PROJECT);
 }

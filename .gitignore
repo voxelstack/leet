@@ -1,3 +1,4 @@
 /binaries
 /submissions
 /build
+**/udebug.toml

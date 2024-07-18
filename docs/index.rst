@@ -3,23 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to leet's documentation!
-================================
+leet_
+=====
+Algorithms, data structures, and leetcode.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
 
-
-Docs
-====
-
-.. doxygendefine:: PROJECT
-
+   lib/index
+   problems/index
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. _leet: https://github.com/voxelstack/leet

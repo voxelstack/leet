@@ -1,9 +1,10 @@
 #pragma icanc include
-#include <icanc.h>
+#include <leet.h>
 #pragma icanc end
 
-int main()
+int
+main()
 {
-    printf("Hello World!\n");
-    return 0;
+        printf("Hello World!\n");
+        return 0;
 }

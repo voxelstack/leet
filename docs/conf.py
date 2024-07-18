@@ -42,6 +42,7 @@ def configure_doxyfile(input_dir, output_dir):
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 breathe_projects = {}
+breathe_domain_by_extension = { "h" : "c" }
 
 if read_the_docs_build:
     input_dir = '../include'

@@ -2,6 +2,7 @@ find_package(Doxygen REQUIRED)
 find_package(Sphinx REQUIRED)
 
 file(GLOB_RECURSE LEET_PUBLIC_HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
+file(GLOB_RECURSE LEET_DOC_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.rst)
 
 set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/include)
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
@@ -35,8 +36,7 @@ add_custom_command(
     ${SPHINX_SOURCE} ${SPHINX_BUILD}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS
-    # TODO Add other doc files.
-    ${CMAKE_CURRENT_SOURCE_DIR}/index.rst
+    ${LEET_DOC_SOURCES}
     ${DOXYGEN_INDEX_FILE}
     MAIN_DEPENDENCY ${SPHINX_SOURCE}/conf.py
     COMMENT "Generating sphinx html."

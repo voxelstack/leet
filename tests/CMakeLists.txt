@@ -6,6 +6,11 @@ foreach(PATH ${LEET_TESTS})
     string(REPLACE "/" "_" NAME ${NAME})
 
     add_executable("test-${NAME}" ${PATH})
+
+    # Test macros execute functions that are defined at the end of the file.
+    # Test functions always return int and have no arguments.
+    target_compile_options("test-${NAME}" PRIVATE "-Wno-implicit-function-declaration")
+
     target_link_libraries("test-${NAME}" PRIVATE leet)
     add_test(
         "build-${NAME}"

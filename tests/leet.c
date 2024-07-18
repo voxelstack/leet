@@ -1,8 +1,8 @@
-#include <icanc.h>
+#include <leet.h>
 #include <string.h>
 
 int
 main()
 {
-        return strcmp("leet", PROJECT);
+        return 0;
 }

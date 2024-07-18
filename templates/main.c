@@ -1,8 +1,9 @@
 #pragma icanc include
-#include <icanc.h>
+#include <leet.h>
 #pragma icanc end
 
-int main()
+int
+main()
 {
-    return 0;
+        return 0;
 }

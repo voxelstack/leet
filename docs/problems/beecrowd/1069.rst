@@ -1,0 +1,25 @@
+1069_
+=====
+
+Removing . has no consequences, so they can be ignored, which turns the inputs into:
+
+.. code-block::
+
+    <><<>>
+    <<<<<<<<>
+
+The question now becomes "how many balanced pairs of brackets are on a string", which is `easily solvable with a stack <https://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/>`_.
+
+However, checking the `stack.c`_ solution you'll notice that the stack is only being used to check if we have seen a < before, and can be replaced with a simple counter.
+If we were dealing with *multiple types* of brackets, a counter wouldn't be enough (e.g. :code:`[()]{}{[()()]()}`).
+
+Solutions
+---------
+`stack.c`_
+    Pushes < into a stack, pops the top of the stack when a > is found, incrementing the result.
+`counter.c`_
+    Counts how many < have appeared so far, decrements the counter when a > is found, incrementing the result.
+
+.. _1069: https://judge.beecrowd.com/en/problems/view/1069
+.. _stack.c: https://github.com/voxelstack/leet/blob/main/problems/beecrowd/1069/stack.c
+.. _counter.c: https://github.com/voxelstack/leet/blob/main/problems/beecrowd/1069/counter.c

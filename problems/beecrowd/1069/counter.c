@@ -9,7 +9,7 @@ main()
         char buf[1001];
 
         scanf("%u\n", &no);
-        for (int n = 0; n < no; ++n)
+        do
         {
                 unsigned int openno = 0;
                 unsigned int res = 0;
@@ -26,6 +26,6 @@ main()
                         }
                 }
                 printf("%u\n", res);
-        }
+        } while (--no);
         return 0;
 }

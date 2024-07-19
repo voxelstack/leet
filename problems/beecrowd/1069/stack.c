@@ -12,10 +12,9 @@ main()
         arrstack_make(&s, sizeof(char), 1000);
 
         scanf("%u\n", &no);
-        for (int n = 0; n < no; ++n)
+        do
         {
                 unsigned int res = 0;
-                arrstack_clear(&s);
 
                 gets(buf);
                 for (int i = 0; buf[i] != '\0'; ++i)
@@ -29,6 +28,7 @@ main()
                         }
                 }
                 printf("%u\n", res);
-        }
+                arrstack_clear(&s);
+        } while (--no);
         return 0;
 }

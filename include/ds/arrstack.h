@@ -116,6 +116,7 @@ arrstack_rwd(struct slice* p)
 
 /**
  * @brief Pops and discards all values on the stack.
+ * @see slice_clear
  *
  * @param p Handle to the slice.
  */

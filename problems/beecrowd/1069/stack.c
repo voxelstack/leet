@@ -30,5 +30,7 @@ main()
                 printf("%u\n", res);
                 arrstack_clear(&s);
         } while (--no);
+
+        arrstack_del(&s);
         return 0;
 }

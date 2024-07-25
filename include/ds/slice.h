@@ -31,16 +31,18 @@
  */
 struct slice
 {
-        size_t _capacity; //!< Size of the managed array in bytes.
-        size_t _el_size;  //!< Size of each element in bytes.
-        ptrdiff_t
-            _ptr; //!< Write pointer.
-                  //!< (Offset in bytes to the first free spot on the array.)
-        byte* _data; //!< Pointer to the managed array.
+        size_t _capacity; ///< Size of the managed array in bytes.
+        size_t _el_size;  ///< Size of each element in bytes.
+        ptrdiff_t _ptr; ///< Write pointer. (Byte offset to the first free spot
+                        ///< on the array.)
+        byte* _data;    ///< Pointer to the managed array.
 };
 
 /**
  * @brief Initializes a slice and allocates its memory.
+ *
+ * Every call to slice_make **must** have a matching call to @ref slice_del to
+ * release the managed memory.
  *
  * @param p Handle to the slice.
  * @param el_size Size of each element.
@@ -53,6 +55,18 @@ slice_make(struct slice* p, size_t el_size, size_t el_no)
         p->_el_size = el_size;
         p->_ptr = 0;
         p->_data = malloc(p->_capacity);
+}
+
+/**
+ * @brief Deallocates the memory managed by a slice created by @ref slice_make
+ *
+ *
+ * @param p Handle to the slice.
+ */
+void
+slice_del(struct slice* p)
+{
+        free(p->_data);
 }
 
 /**

@@ -34,6 +34,7 @@ make()
         should(eq(s._ptr, 0), "ptr was not initialized");
         should(!eq(s._data, NULL), "data was null");
 
+        slice_del(&s);
         return 0;
 }
 
@@ -51,6 +52,7 @@ empty()
         slice_append(&s, &el);
         should(!slice_empty(&s), "empty was true for non-empty slice");
 
+        slice_del(&s);
         return 0;
 }
 
@@ -67,6 +69,7 @@ resize()
         should(eq(s._capacity, el_size * el_no * _SLICE_SCALE_FACTOR),
                "capacity was not scaled by scale factor");
 
+        slice_del(&s);
         return 0;
 }
 
@@ -84,6 +87,7 @@ append()
         should(eq(*s._data, el), "element was not pushed");
         should(eq(s._ptr, el_size), "ptr was not advanced");
 
+        slice_del(&s);
         return 0;
 }
 
@@ -105,6 +109,7 @@ sappend()
         should(eq(s._capacity, el_no * _SLICE_SCALE_FACTOR),
                "slice was not resized");
 
+        slice_del(&s);
         return 0;
 }
 
@@ -123,6 +128,7 @@ rwd()
         slice_rwd(&s, 2);
         should(eq(s._ptr, 0), "ptr was not rewinded");
 
+        slice_del(&s);
         return 0;
 }
 
@@ -140,6 +146,7 @@ clear()
         slice_clear(&s);
         should(eq(s._ptr, 0), "ptr was not rewinded");
 
+        slice_del(&s);
         return 0;
 }
 
@@ -164,5 +171,6 @@ at()
         dst = slice_at(&s, 0);
         should(eq(*dst, el0), "returned value was not element at index");
 
+        slice_del(&s);
         return 0;
 }

@@ -3,7 +3,7 @@
 [![Documentation Status](https://readthedocs.org/projects/leet/badge/?version=latest)](https://leet.readthedocs.io/en/latest/?badge=latest)
 
 # leet
-leet includes a well documented and tested header library for data structures and algorithms, along with my solutions to leetcode problems.
+This repo contains a well documented and tested header library for data structures and algorithms, along with my solutions to leetcode problems.
 
 ## Features
 ### Header library

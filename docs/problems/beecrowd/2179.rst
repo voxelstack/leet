@@ -1,0 +1,57 @@
+2179_
+=====
+
+Encoding moves as offsets
+-------------------------
+To move to the right or down, we add one to the index of the current column or row. Likewise, to move left or up, we subtract one from the index of the current column or row.
+We can encode these moves as two arrays: :code:`mvr` (short for move row) with the values we should add to the row, and :code:`mvc` with the values we should add to the column.
+
+.. code-block::
+    :caption: Possible moves, encoded as offsets to the current row/column.
+
+        //            R  D  L  U
+        int mvr[] = { 0, 1, 0, -1 };
+        int mvc[] = { 1, 0, -1, 0 };
+
+Since the moves always happen in order (Right, Down, Left, Up), we can encode the direction as an index (:code:`dir`) into these arrays (which goes from 0 to 3), and changing to the next direction is equivalent to doing :code:`(dir + 1) % 4`.
+
+Naive ad-hoc
+------------
+This encoding makes it very easy to ad-hoc the problem, which you can see on `walk.c`_.
+We simulate every single step by adding offsets to the current row/column, changing direction after every fixed number of steps, and incrementing the number of steps after every two direction changes (Right *one*, Down *one*, Left *two*, Up *two*, ...).
+When all the cells within the matrix have been visited, we are done.
+
+Without a matrix
+----------------
+Walking the matrix horizontally corresponds to adding or subtracting one to the value of the current cell, while walking vertically corresponds to adding or subtracting :code:`N` to the value of the current cell.
+Knowing this lets us skip the matrix altogether by also encoding the changes to the value of the cell into an array.
+
+.. code-block::
+    :caption: Changes to the value of the cell for each direction.
+
+        //            R  D  L  U
+        int mv[] = { 1, n, -1, -n };
+
+Now we keep track of the value of the current cell by calculating the initial value, then updating it whenever we take a step.
+Note that this value is not "correct" while we are walking outside of the matrix (walking up or down would no longer change the value of the cell by :code:`N`), but since for every step we take *away* from the matrix we must take another *towards* the matrix in order to come back, the value will always be correct when we are inside the matrix.
+This lets us ad-hoc the problem the exact same way but replacing memory accesses with arithmetic operations, which you can see on `nomat.c`_
+
+Avoiding single steps outside of the matrix
+-------------------------------------------
+Since we only need to print the value of the current cell while *inside* the matrix, it is wasteful to walk step by step while *outside*.
+The naive adhoc solution can be improved by detecting when we leave the matrix (when the row or column indices go out of bounds) and calculating steps taken outside the matrix all at once, avoiding unnecessary iterations.
+Some invariants apply, for example we **must** change direction at least twice to return to the matrix after leaving it, possibly three times when leaving from a corner.
+
+.. todo::
+    Avoid unnecessary iterations outside the matrix.
+
+Solutions
+---------
+`walk.c`_
+    Naive ad-hoc. While keeping track of the current cell, simulate every step, printing the current cell if it is within the matrix.
+`nomat.c`_
+    Same as `walk.c`_ but eliminates the need for a matrix by keeping track of the value of the current cell and updating it on every move.
+
+.. _2179: https://judge.beecrowd.com/en/problems/view/2179
+.. _walk.c: https://github.com/voxelstack/leet/blob/main/problems/beecrowd/2179/walk.c
+.. _nomat.c: https://github.com/voxelstack/leet/blob/main/problems/beecrowd/2179/nomat.c

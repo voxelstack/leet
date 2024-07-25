@@ -1,6 +1,7 @@
 #pragma once
 #pragma icanc include
 #include <ds/slice.h>
+#include <leet.h>
 #pragma icanc end
 
 /**
@@ -18,6 +19,9 @@
 
 /**
  * @brief Initializes a stack and allocates its memory.
+ *
+ * Every call to slice_make **must** have a matching call to @ref slice_del to
+ * release the managed memory.
  * @see slice_make
  *
  * @param p Handle to the slice.
@@ -26,6 +30,15 @@
  */
 void arrstack_make(struct slice* p, size_t el_size, size_t el_no)
     __attribute__((alias("slice_make")));
+
+/**
+ * @brief Deallocates the memory managed by a stack created by
+ * @ref arrstack_make
+ * @see slice_del
+ *
+ * @param p Handle to the slice.
+ */
+void arrstack_del(struct slice* p) __attribute__((alias("slice_del")));
 
 /**
  * @brief Returns whether the given stack is empty.

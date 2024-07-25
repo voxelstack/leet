@@ -29,6 +29,7 @@ peek()
         should(eq(*dst, el), "returned value was not the top of the stack");
         should(eq(s._ptr, el_size), "ptr was changed");
 
+        arrstack_del(&s);
         return 0;
 }
 
@@ -48,6 +49,7 @@ pop()
         should(eq(dst, el), "returned value was not the top of the stack");
         should(eq(s._ptr, 0), "ptr was not rewinded");
 
+        arrstack_del(&s);
         return 0;
 }
 
@@ -66,5 +68,6 @@ rwd()
         arrstack_rwd(&s);
         should(eq(s._ptr, 0), "ptr was not rewinded");
 
+        arrstack_del(&s);
         return 0;
 }

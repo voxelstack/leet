@@ -13,7 +13,7 @@ author = 'voxelstack'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["breathe"]
+extensions = ["breathe", "sphinx.ext.todo"]
 
 # Breathe configuration
 breathe_default_project = "leet"
@@ -26,6 +26,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+todo_include_todos = True
 
 import os
 import subprocess

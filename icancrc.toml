@@ -1,2 +1,9 @@
 editor = "code.cmd"
 compiler = "gcc"
+
+[udebug]
+min_votes = 5 # Inputs that have less than min_votes
+              # will not be downloaded.
+[udebug.judge_alias]
+beecrowd = "URI" # Map the judge names used on your repo
+                 # to the judge names used on udebug.

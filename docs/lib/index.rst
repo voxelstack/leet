@@ -5,3 +5,4 @@ Header library
    :maxdepth: 2
 
    ds/index
+   alg/index

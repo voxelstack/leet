@@ -1,17 +1,20 @@
 Slice
 =====
 
+API
+---
+
 .. doxygenfile:: ds/slice.h
     :sections: briefdescription detaileddescription
 
 Handle
-------
+______
 
 .. doxygenstruct:: slice
     :members:
 
 Functions
----------
+_________
 
 .. doxygenfunction:: slice_make
 .. doxygenfunction:: slice_empty
@@ -23,6 +26,6 @@ Functions
 .. doxygenfunction:: slice_at
 
 Defines
--------
+_______
 
 .. doxygendefine:: _SLICE_SCALE_FACTOR

@@ -6,7 +6,7 @@ Encoding moves as offsets
 To move to the right or down, we add one to the index of the current column or row. Likewise, to move left or up, we subtract one from the index of the current column or row.
 We can encode these moves as two arrays: :code:`mvr` (short for move row) with the values we should add to the row, and :code:`mvc` with the values we should add to the column.
 
-.. code-block::
+.. code-block:: c
     :caption: Possible moves, encoded as offsets to the current row/column.
 
         //            R  D  L  U
@@ -26,7 +26,7 @@ Without a matrix
 Walking the matrix horizontally corresponds to adding or subtracting one to the value of the current cell, while walking vertically corresponds to adding or subtracting :code:`N` to the value of the current cell.
 Knowing this lets us skip the matrix altogether by also encoding the changes to the value of the cell into an array.
 
-.. code-block::
+.. code-block:: c
     :caption: Changes to the value of the cell for each direction.
 
         //            R  D  L  U

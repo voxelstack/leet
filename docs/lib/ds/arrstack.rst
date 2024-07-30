@@ -1,11 +1,14 @@
 Stack (array based)
 ===================
 
+API
+---
+
 .. doxygenfile:: ds/arrstack.h
     :sections: briefdescription detaileddescription
 
 Functions
----------
+_________
 
 .. doxygenfunction:: arrstack_make
 .. doxygenfunction:: arrstack_empty

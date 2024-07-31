@@ -81,10 +81,8 @@ _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*), size_t p,
         size_t nl = q - p + 1;
         size_t nr = r - q;
 
-        // Copy the left array to the first half of the work slice.
-        memcpy(slice_at(w, p), slice_at(a, p), nl * a->_el_size);
-        // Copy the right array to the second half of the work slice.
-        memcpy(slice_at(w, q + 1), slice_at(a, q + 1), nr * a->_el_size);
+        // Copy the array to the work slice.
+        memcpy(slice_at(w, p), slice_at(a, p), (r - p + 1) * a->_el_size);
 
         size_t i = 0;
         size_t j = 0;

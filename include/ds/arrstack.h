@@ -12,8 +12,8 @@
  * Array based stacks are backed by a slice. Data is stored in a contiguous
  * array for better cache locality. Some of the functions for manipulating the
  * underlying memory are aliases to slice functions. To keep the code clearer
- * you **should** use the aliases when working array based data structures, and
- * you **should not** interact with the slice directly.
+ * you **should** use the aliases when working with array based data
+ * structures, and you **should not** interact with the slice directly.
  * @see slice
  */
 

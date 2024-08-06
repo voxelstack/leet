@@ -43,6 +43,7 @@ The naive adhoc solution can be improved by detecting when we leave the matrix (
 Some invariants apply, for example we **must** change direction at least twice to return to the matrix after leaving it, possibly three times when leaving from a corner.
 
 .. todo::
+
     Avoid unnecessary iterations outside the matrix.
 
 Solutions

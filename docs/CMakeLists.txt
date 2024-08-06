@@ -31,7 +31,7 @@ add_custom_target(Doxygen ALL DEPENDS ${DOXYGEN_INDEX_FILE})
 add_custom_command(
     OUTPUT ${SPHINX_INDEX_FILE}
     COMMAND
-    ${SPHINX_EXECUTABLE} -b html
+    ${SPHINX_EXECUTABLE} -b html -E -a
     -Dbreathe_projects.leet=${DOXYGEN_OUTPUT_DIR}/xml
     ${SPHINX_SOURCE} ${SPHINX_BUILD}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

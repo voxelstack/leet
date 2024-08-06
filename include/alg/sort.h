@@ -42,16 +42,14 @@ void _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*),
  * sort](https://en.wikipedia.org/wiki/Merge_sort) algorithm.
  *
  * Given a slice containing an array `a[p:r]`, write the sorted array to
- * `a[p:r]`.
- *
+ * `a[p:r]`. The comparator receives pointers to the elements being compared.
  * Uses an auxiliary slice as working memory. Data on the auxiliary slice *will
  * not be preserved*.
  *
  * @param a Handle to the slice.
  * @param w Handle to the auxiliary slice. **Must** have at least as much
  * capacity as `a`. **Must** have the same element size as `a`.
- * @param cmp Function that compares two void pointers `a` and `b`, returning
- * `1` if `a <= b` and 0 otherwise.
+ * @param cmp Sort comparator.
  * @param p Starting index of the array.
  * @param r Ending index of the array.
  */
@@ -81,7 +79,7 @@ _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*), size_t p,
         size_t nl = q - p + 1;
         size_t nr = r - q;
 
-        // Copy the array to the work slice.
+        // Copy both arrays to the work slice.
         memcpy(slice_at(w, p), slice_at(a, p), (r - p + 1) * a->_el_size);
 
         size_t i = 0;
@@ -90,8 +88,9 @@ _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*), size_t p,
 
         while (i < nl && j < nr)
         {
+                // Invariant: neither array is empty.
                 // if (l[i] <= r[j])
-                if (cmp(slice_at(w, i + p), slice_at(w, j + q + 1)))
+                if (cmp(slice_at(w, i + p), slice_at(w, j + q + 1)) <= 0)
                         // a[k] = l[i]
                         memcpy(slice_at(a, k++), slice_at(w, i++ + p),
                                a->_el_size);
@@ -106,7 +105,8 @@ _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*), size_t p,
                  * If there are elements left on the left array, copy them to
                  * the sorted array. Note that even though the next if
                  * statement uses k we don't need to increment it, since
-                 * `i < nl && j < nr` is always false.
+                 * `i < nl && j < nr` is always false (one of the arrays is
+                 * empty).
                  */
                 memcpy(slice_at(a, k), slice_at(w, i + p),
                        a->_el_size * (nl - i));

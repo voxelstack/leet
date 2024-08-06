@@ -52,12 +52,12 @@ comparator(void* a, void* b)
         } while (arrno);
 
 void
-del_tree(struct bstree* n)
+tree_del(struct bstree* n)
 {
         if (!n)
                 return;
-        del_tree(n->_left);
-        del_tree(n->_right);
+        tree_del(n->_left);
+        tree_del(n->_right);
         free(container_of(n, struct holder, bst));
 }
 
@@ -104,7 +104,7 @@ search()
         node = bstree_search(root, &value, finder);
         should(eq(node, NULL), "returned value was not null");
 
-        del_tree(root);
+        tree_del(root);
 
         return 0;
 }
@@ -166,7 +166,7 @@ next()
         should(eq(exp, 11),
                "iterator was not stopped after traversing the tree");
 
-        del_tree(root);
+        tree_del(root);
 
         return 0;
 }
@@ -187,7 +187,7 @@ prev()
         should(eq(exp, 0),
                "iterator was not stopped after traversing the tree");
 
-        del_tree(root);
+        tree_del(root);
 
         return 0;
 }

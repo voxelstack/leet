@@ -1,0 +1,37 @@
+1200_
+=====
+
+The main part of the solution is implementing a binary search tree.
+Since one is available on the header library, all we need to do is parse the inputs and interact with the underlying tree.
+
+.. seealso::
+
+    This solution uses a :doc:`../../lib/ds/bstree` and a :doc:`../../lib/ds/slice`.
+
+Parsing the inputs
+------------------
+
+Instructions to query or modify the tree have two parts (the operation and the value), while instructions to traverse the tree only have one part (the type of the traversal).
+When given a format string `scanf` will match as many values as it can and return how many values were matched.
+
+That can be used to simplify the parsing of each input instruction. By using :code:`"%7s %c\n"` as a format string we can match an operator along with an optional value. If only one value was matched it's a traversal instruction, if two values were matched it's an instruction to modify or query the tree.
+Further, the second letter of the tree traversal instructions are different from each other, so we can get away with not comparing the whole word (:code:`I[N]FIXA`, :code:`P[R]EFIXA`, :code:`P[O]SFIXA`).
+
+..  warning::
+
+    Note how the solution first reads a full line into a buffer with :code:`fgets`, and then uses :code:`sscanf` over that buffer.
+    This is required, as if we used :code:`scanf` directly over :code:`stdin` it would continue reading past the end of line after matching inputs that only have one part.
+
+
+Traversing the tree
+-------------------
+
+To minimize the number of writes to :code:`stdout` we can write the values to a slice while traversing the tree, and print the whole slice at once after the traversal is complete. This also makes it easier to get rid of the extra whitespace after the last element: rewind the write pointer by 1 to get it over the last whitespace and replace it with a :code:`\0`.
+
+Solutions
+---------
+`solution.c`_
+    Parse inputs and interact with the underlying tree.
+
+.. _1200: https://judge.beecrowd.com/en/problems/view/1200
+.. _solution.c: https://github.com/voxelstack/leet/blob/main/problems/beecrowd/1200/solution.c

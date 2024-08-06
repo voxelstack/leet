@@ -1,0 +1,76 @@
+1201_
+=====
+
+This is the same solution as :doc:`1200` with an added operation to delete nodes from the tree and slight changes to handle integers instead of characters.
+
+.. seealso::
+
+    The commentary for this solution assumes you have read the commentary for :doc:`1200`.
+
+Deleting nodes
+--------------
+
+When the node being deleted has two subtrees, the deletion implemented on the header library replaces the node by it's successor (the smallest element from the right subtree) before deleting it.
+The problem states that we must replace it with the *predecessor* instead:
+
+    Note: If an element with two subtrees (left and right) is removed, the antecessor (the bigger element from left subtree, must occupy its place and in case of attempt of remove an element inexistent none message must be printed.
+
+For this reason the deletion from the header library cannot be used, and must be reimplemented. Deleting nodes with zero or one subtrees stays the same.
+
+.. code-block:: c
+    :caption: Updated deletion where nodes with two subtrees are replaced by their predecessor.
+
+    void
+    bstree_left_remove(struct bstree** root, struct bstree* n)
+    {
+            if (!n->_left)
+                    // No left subtree, lift the subtree on the right.
+                    _transplant(root, n, n->_right);
+            else if (!n->_right)
+                    // No right subtree, lift the subtree on the left.
+                    _transplant(root, n, n->_left);
+            else
+            {
+                    // Two subtrees, find the predecessor.
+                    // Invariant: the predecessor doesn't have a right subtree (if
+                    // it did, the predecessor would have to be a node in that
+                    // subtree).
+                    struct bstree* y = bstree_last(n->_left);
+                    if (y != n->_left)
+                    {
+                            // The predecessor is not immediately to the left,
+                            // remove it.
+                            _transplant(root, y, y->_left);
+                            // Place the removed predecessor immediately to the
+                            // left of n.
+                            y->_left = n->_left;
+                            y->_left->_parent = y;
+                    }
+
+                    // The predecessor is immediately to the left of n, lift it.
+                    _transplant(root, n, y);
+                    y->_right = n->_right;
+                    y->_right->_parent = y;
+            }
+    }
+
+Writing integers
+----------------
+
+Since now the tree stores integers, we can no longer get away with simply appending the value of the node to the output buffer.
+Thankfully that can be solved by using :code:`sprintf` directly onto our output slice. It returns how many characters were written, which can be used to correctly advance the slice's write pointer.
+
+.. code-block:: c
+    :caption: sprintf the value of a node directly to the output slice, and increment the write pointer.
+    :emphasize-lines: 2
+
+    unsigned int value = container_of(root, struct holder, bst)->data;
+    out->_ptr += sprintf(out->_data + out->_ptr, "%u ", value);
+
+Solutions
+---------
+`solution.c`_
+    Parse inputs and interact with the underlying tree.
+
+.. _1201: https://judge.beecrowd.com/en/problems/view/1201
+.. _solution.c: https://github.com/voxelstack/leet/blob/main/problems/beecrowd/1201/solution.c

@@ -1,6 +1,15 @@
 Binary search tree
 ==================
 
+Inserting data into a bstree
+----------------------------
+There are two main ways to insert data into the tree: using the provided insertion function along with a comparator, or writing your own insertion function.
+Writing your own insertion function is more performant since it avoids using a function pointer.
+
+.. chart:: _charts/bench.bstree_insert_fnptr.json
+
+   1.000.000 random numbers inserted into a bstree (-O0, 100 runs)
+
 API
 ---
 
@@ -16,6 +25,7 @@ ______
 Functions
 _________
 
+.. doxygenfunction:: bstree_link
 .. doxygenfunction:: bstree_insert
 .. doxygenfunction:: bstree_search
 .. doxygenfunction:: bstree_first

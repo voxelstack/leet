@@ -8,6 +8,7 @@ main()
         start();
 
         test(insert);
+        test(insert_duplicate);
         test(search);
         test(first);
         test(last);
@@ -74,14 +75,34 @@ insert()
         struct holder nr = { .bst = { 0 }, .data = 2 };
         struct bstree* root = NULL;
 
-        bstree_insert(&root, &n.bst, comparator);
+        bool result = bstree_insert(&root, &n.bst, comparator);
+        should(result, "insertion did not return true");
         should(eq(root, &n.bst), "root was not updated");
 
-        bstree_insert(&root, &nr.bst, comparator);
+        result = bstree_insert(&root, &nr.bst, comparator);
+        should(result, "insertion did not return true");
         should(eq(root, &n.bst), "root was changed when inserting child");
         should(eq(root->_right, &nr.bst), "child was not inserted");
         should(eq(nr.bst._parent, root),
                "parent was not updated when inserting child");
+
+        return 0;
+}
+
+int
+insert_duplicate()
+{
+        struct holder n = { .bst = { 0 }, .data = 1 };
+        struct holder d = { .bst = { 0 }, .data = 1 };
+        struct bstree* root = NULL;
+
+        bstree_insert(&root, &n.bst, comparator);
+        should(eq(root, &n.bst), "root was not updated");
+
+        bool result = bstree_insert(&root, &d.bst, comparator);
+        should(!result, "duplicate insertion did not return false");
+        should(!root->_left && !root->_right,
+               "tree was changed by duplicate insertion");
 
         return 0;
 }

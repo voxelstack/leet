@@ -7,6 +7,10 @@ set(CMAKE_C_STANDARD 99)
 
 add_subdirectory("include")
 
+if(NOT DEFINED ENV{NO_BENCHMARKS})
+    add_subdirectory("benchmarks")
+endif()
+
 if(NOT DEFINED ENV{NO_DOCS})
     add_subdirectory("docs")
 endif()

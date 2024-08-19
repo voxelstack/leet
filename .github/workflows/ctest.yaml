@@ -1,6 +1,7 @@
 name: ctest
 on: push
 env:
+  NO_BENCHMARKS: 1
   NO_DOCS: 1
 
 jobs:

@@ -44,6 +44,24 @@ struct bstree
 void _transplant(struct bstree** root, struct bstree* u, struct bstree* v);
 
 /**
+ * @brief Grafts a new node into the tree at the given location.
+ *
+ * Utility for writing external insert functions. Writing your own insert
+ * function is more performant since it avoids using a function pointer.
+ *
+ * @param link Location to insert the node.
+ * @param n The node to insert.
+ * @param parent Parent of the node to insert.
+ */
+void
+bstree_link(struct bstree** link, struct bstree* n, struct bstree* parent)
+{
+        n->_parent = parent;
+        n->_left = n->_right = NULL;
+        *link = n;
+}
+
+/**
  * @brief Inserts a node at the appropriate position on the tree.
  *
  * Given a node and a comparator, finds the appropriate position to insert the
@@ -56,30 +74,27 @@ void _transplant(struct bstree** root, struct bstree* u, struct bstree* v);
  * @param n The node to insert.
  * @param cmp Insertion comparator.
  */
-void
+bool
 bstree_insert(struct bstree** root, struct bstree* n, int (*cmp)(void*, void*))
 {
-        struct bstree* x = *root;
-        struct bstree* y = NULL;
-        while (x)
+        struct bstree** link = root;
+        struct bstree* parent = NULL;
+        while (*link)
         {
-                // Invariant: x is not empty, the new node must be inserted to
-                // the left or to the right.
-                y = x;
-                if (cmp(n, x) < 0)
-                        x = x->_left;
+                // Invariant: link is not empty, the new node must be inserted
+                // to the left or to the right.
+                parent = *link;
+                int result = cmp(n, *link);
+                if (result < 0)
+                        link = &((*link)->_left);
+                else if (result > 0)
+                        link = &((*link)->_right);
                 else
-                        x = x->_right;
+                        return false;
         }
 
-        n->_parent = y;
-        if (!y)
-                // The tree was empty.
-                *root = n;
-        else if (cmp(n, y) < 0)
-                y->_left = n;
-        else
-                y->_right = n;
+        bstree_link(link, n, parent);
+        return true;
 }
 
 /**
@@ -143,7 +158,7 @@ bstree_last(struct bstree* n)
  *
  * Used to traverse the tree in order.
  *
- * `for (struct bstree* it = bstree_first(&root); it; it = bstree_next(it))`
+ * `for (struct bstree* it = bstree_first(root); it; it = bstree_next(it))`
  *
  * @param n Handle to the current node.
  * @return Handle to the successor of the node.
@@ -169,7 +184,7 @@ bstree_next(struct bstree* n)
  *
  * Used to traverse the tree in reverse order.
  *
- * `for (struct bstree* it = bstree_last(&root); it; it = bstree_prev(it))`
+ * `for (struct bstree* it = bstree_last(root); it; it = bstree_prev(it))`
  *
  * @param n Handle to the current node.
  * @return Handle to the predecessor of the node.

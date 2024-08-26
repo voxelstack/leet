@@ -1,25 +1,10 @@
-file(GLOB_RECURSE LEET_TESTS ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+include(Tests)
 
-foreach(PATH ${LEET_TESTS})
-    file(RELATIVE_PATH NAME ${CMAKE_CURRENT_SOURCE_DIR} ${PATH})
-    string(REPLACE ".c" "" NAME ${NAME})
-    string(REPLACE "/" "_" NAME ${NAME})
+leet_test(leet.c)
 
-    add_executable("test-${NAME}" ${PATH})
+leet_test(alg/sort.c)
 
-    # Test macros execute functions that are defined at the end of the file.
-    # Test functions always return int and have no arguments.
-    target_compile_options("test-${NAME}" PRIVATE "-Wno-implicit-function-declaration")
-
-    target_link_libraries("test-${NAME}" PRIVATE leet)
-    add_test(
-        "build-${NAME}"
-        "${CMAKE_COMMAND}"
-        --build "${CMAKE_BINARY_DIR}"
-        --config "$<CONFIG>"
-        --target "test-${NAME}"
-    )
-    set_tests_properties("build-${NAME}" PROPERTIES FIXTURES_SETUP "build-${NAME}")
-    add_test(NAME "test-${NAME}" COMMAND "test-${NAME}")
-    set_tests_properties("test-${NAME}" PROPERTIES FIXTURES_REQUIRED "build-${NAME}")
-endforeach()
+leet_test(ds/arrstack.c)
+leet_test(ds/bstree.c)
+leet_test(ds/mat.c)
+leet_test(ds/slice.c)

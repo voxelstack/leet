@@ -6,7 +6,7 @@ set(BENCHMARK_CHART "${CMAKE_SOURCE_DIR}/scripts/benchmark_chart.py")
 set(BENCHMARK_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/results")
 file(MAKE_DIRECTORY ${BENCHMARK_OUTPUT_DIR})
 
-function(add_benchmark SOURCE)
+function(leet_benchmark SOURCE)
     string(REPLACE ".c" "" TARGET ${SOURCE})
     string(REPLACE "/" "." TARGET ${TARGET})
     string(PREPEND TARGET "bench.")
@@ -33,7 +33,7 @@ function(add_benchmark SOURCE)
     add_dependencies(benchmarks ${RUNNER})
 endfunction()
 
-function(add_chart)
+function(leet_chart)
     set(oneValueArgs SOURCE NAME)
     set(multiValueArgs RUNS)
     cmake_parse_arguments(

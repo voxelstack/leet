@@ -6,6 +6,7 @@ set(CMAKE_C_COMPILER gcc)
 set(CMAKE_C_STANDARD 99)
 
 add_subdirectory("include")
+add_subdirectory("programs")
 
 if(NOT DEFINED ENV{NO_BENCHMARKS})
     add_subdirectory("benchmarks")

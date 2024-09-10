@@ -12,6 +12,7 @@ Algorithms, data structures, and leetcode.
 
    lib/index
    problems/index
+   programs/index
    todo
 
 Indices and tables

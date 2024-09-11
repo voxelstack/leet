@@ -35,7 +35,7 @@ op
     Pop the two values on top of the stack, execute an operation, and push the result back onto the stack.
 
     .. code-block::
-        :caption: 3 * 1 + 4
+        :caption: 3 * (1 + 4)
 
         | < 1
         | < 4

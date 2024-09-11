@@ -24,7 +24,7 @@ All solutions are tested with icanc[^5] using the testcases from the repo. When 
 
 ### Programs
 On the `programs/` directory you can find the sources for standalone programs. Whenever I want to study, showcase, or document something that is not a leetcode problem, it goes here.
-These are varied programs that don't need their own repo, built only for learning or showcasing skills.
+These are varied programs that don't need their own repo, built only for learning or showcasing something.
 
 ### Documentation
 All library code is documented with Doxygen[^1], which is then turned into a [Read the Docs website](https://leet.readthedocs.io/en/latest/?badge=latest) using sphinx[^2] and breathe[^3]. The programs are documented as well.
@@ -35,7 +35,7 @@ The setup is based on this [excellent guide](https://devblogs.microsoft.com/cppb
 All library code is tested with ctest[^4]. Non-trivial programs may be tested as well. You can find the test code in the `tests/` directory.
 
 ### Benchmarks
-The performance charts on the documentation come from benchmarks on the `benchmarks/` directory.
+The [performance charts](https://leet.readthedocs.io/en/latest/lib/ds/bstree.html#inserting-data-into-a-bstree) on the documentation come from benchmarks on the `benchmarks/` directory.
 
 ## License
 The header library is released under the MIT license and meant to be used as a learning resource. You are free to use it on your own leetcode solutions but I'd be happier (and you'd learn more) if you made your own.

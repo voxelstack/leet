@@ -50,7 +50,9 @@ Values printed without a :code:`|` are outputs.
 
 number
     The result of a pop.
-nil
+"nil"
     There is nothing on the stack.
-err
+"err"
     Error executing the last command. The stack was not changed.
+"full"
+    The stack is full.

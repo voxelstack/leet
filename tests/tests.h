@@ -21,4 +21,6 @@
                 return 1;                                                     \
         }
 
+#define fail(msg) should(false, msg);
+
 #define eq(a, b) ((a) == (b))

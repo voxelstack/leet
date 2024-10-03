@@ -1,6 +1,7 @@
 include(Tests)
 
 leet_test(leet.c)
+leet_test(error.c)
 
 leet_test(alg/sort.c)
 

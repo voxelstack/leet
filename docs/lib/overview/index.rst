@@ -2,6 +2,5 @@ Overview
 ========
 
 .. toctree::
-    :glob:
-
-    *
+    errors
+    comparators

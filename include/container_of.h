@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #pragma icanc include
 #include <leet.h>
 #pragma icanc end

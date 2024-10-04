@@ -8,7 +8,7 @@ Data structures can be implemented without being tied to any data, and then embe
 
 .. code-block:: c
     :caption: This binary search tree node holds no data. Instead it's embedded onto an album.
-    :emphasize-lines: 5
+    :emphasize-lines: 12
 
     struct bstree
     {

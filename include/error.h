@@ -38,10 +38,12 @@ struct error
  * @param ... Parameters for the format string.
  */
 #define panic(...)                                                            \
-        fprintf(stderr, "panicked at %s:%d:\n", __FILE__, __LINE__);          \
-        fprintf(stderr, __VA_ARGS__);                                         \
-        fprintf(stderr, "\n");                                                \
-        exit(-1);
+        {                                                                     \
+                fprintf(stderr, "panicked at %s:%d:\n", __FILE__, __LINE__);  \
+                fprintf(stderr, __VA_ARGS__);                                 \
+                fprintf(stderr, "\n");                                        \
+                exit(-1);                                                     \
+        }
 
 /**
  * @brief Reports a recoverable error with a formatted message.

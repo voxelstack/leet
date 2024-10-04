@@ -31,11 +31,11 @@
  */
 struct slice
 {
+        byte* _data;      ///< Pointer to the managed array.
         size_t _capacity; ///< Size of the managed array in bytes.
         size_t _el_size;  ///< Size of each element in bytes.
         ptrdiff_t _ptr; ///< Write pointer. (Byte offset to the first free spot
                         ///< on the array.)
-        byte* _data;    ///< Pointer to the managed array.
 };
 
 /**

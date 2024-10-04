@@ -47,4 +47,3 @@ Consider an example where the data is an album with a rating:
 .. todo::
 
     * Proper definition of ordering and equality.
-    * Ensure that comparators get inlined.

@@ -21,6 +21,8 @@ _________
 .. doxygenfunction:: slice_resize
 .. doxygenfunction:: slice_append
 .. doxygenfunction:: slice_sappend
+.. doxygenfunction:: slice_insert
+.. doxygenfunction:: slice_sinsert
 .. doxygenfunction:: slice_rwd
 .. doxygenfunction:: slice_clear
 .. doxygenfunction:: slice_at

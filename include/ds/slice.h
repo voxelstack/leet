@@ -133,6 +133,51 @@ slice_sappend(struct slice* p, void* el)
 }
 
 /**
+ * @brief Inserts a value into the given position of the slice.
+ *
+ * Copies the element stored at `el` into the given position of the slice,
+ * shifting all existing elements to the right and advances the write pointer.
+ * *Does not* check if there is enough space on the slice. For a safe version
+ * that grows the slice when it's out of space, use
+ * @ref slice_sinsert.
+ *
+ * @param p Handle to the slice.
+ * @param el Pointer to the element to insert.
+ * @param idx Index to insert the element at.
+ */
+void
+slice_insert(struct slice* p, void* el, size_t idx)
+{
+        size_t at = idx * p->_el_size;
+        memcpy(p->_data + at + p->_el_size, p->_data + at, p->_ptr - at);
+        memcpy(p->_data + at, el, p->_el_size);
+        p->_ptr += p->_el_size;
+}
+
+/**
+ * @brief Inserts a value into the given position of the slice *checking its
+ * capacity*.
+ *
+ * Copies the element stored at `el` into the given position of the slice,
+ * shifting all existing elements to the right and advances the write pointer.
+ * If the slice is out of space, grows the allocated memory before appending.
+ * When certain that the slice has enough space, use
+ * @ref slice_insert instead.
+ * @see slice_resize
+ *
+ * @param p Handle to the slice.
+ * @param el Pointer to the element to insert.
+ * @param idx Index to insert the element at.
+ */
+void
+slice_sinsert(struct slice* p, void* el, size_t idx)
+{
+        if (p->_ptr >= p->_capacity)
+                slice_resize(p);
+        slice_insert(p, el, idx);
+}
+
+/**
  * @brief Rewinds the write pointer, discarding elements at the end of the
  * slice.
  *

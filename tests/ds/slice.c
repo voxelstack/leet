@@ -12,6 +12,8 @@ main()
         test(resize);
         test(append);
         test(sappend);
+        test(insert);
+        test(sinsert);
         test(rwd);
         test(clear);
         test(at);
@@ -107,6 +109,54 @@ sappend()
 
         slice_sappend(&s, &el);
         should(eq(s._capacity, el_no * _SLICE_SCALE_FACTOR),
+               "slice was not resized");
+
+        slice_del(&s);
+        return 0;
+}
+
+int
+insert()
+{
+        size_t el_size = sizeof(int);
+        size_t el_no = 5;
+        struct slice s = { 0 };
+        int el = 0;
+        int res[] = { 1, 2, 0, 3, 4 };
+
+        slice_make(&s, el_size, el_no);
+        for (int i = 1; i <= 4; ++i)
+                slice_append(&s, &i);
+        slice_insert(&s, &el, 2);
+
+        for (int i = 0; i < 5; ++i)
+                should(eq(*(int*)slice_at(&s, i), res[i]),
+                       "element order was incorrect");
+        should(eq(s._ptr, 5 * el_size), "ptr was not advanced");
+
+        slice_del(&s);
+        return 0;
+}
+
+int
+sinsert()
+{
+        size_t el_size = sizeof(int);
+        size_t el_no = 4;
+        struct slice s = { 0 };
+        int el = 0;
+        int res[] = { 1, 2, 0, 3, 4 };
+
+        slice_make(&s, el_size, el_no);
+        for (int i = 1; i <= 4; ++i)
+                slice_append(&s, &i);
+        slice_sinsert(&s, &el, 2);
+
+        for (int i = 0; i < 5; ++i)
+                should(eq(*(int*)slice_at(&s, i), res[i]),
+                       "element order was incorrect");
+        should(eq(s._ptr, 5 * el_size), "ptr was not advanced");
+        should(eq(s._capacity, el_no * el_size * _SLICE_SCALE_FACTOR),
                "slice was not resized");
 
         slice_del(&s);

@@ -13,7 +13,11 @@
         LARGE_INTEGER _f;                                                     \
         long long _ts[_RUNS];
 
-#define start() QueryPerformanceFrequency(&_f);
+#define start()                                                               \
+        QueryPerformanceFrequency(&_f);                                       \
+                                                                              \
+        _Pragma("GCC diagnostic push");                                       \
+        _Pragma("GCC diagnostic ignored \"-Wimplicit-function-declaration\"")
 
 #define benchmark(f)                                                          \
         printf("%s,", #f);                                                    \
@@ -34,4 +38,7 @@
                               / _f.QuadPart);                                 \
         }
 
-#define end() return 0;
+#define end()                                                                 \
+        _Pragma("GCC diagnostic pop");                                        \
+                                                                              \
+        return 0;

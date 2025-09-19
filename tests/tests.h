@@ -4,13 +4,18 @@
 
 #define start()                                                               \
         int _failures = 0;                                                    \
-        printf("%s\n", __FILE__);
+        printf("%s\n", __FILE__);                                             \
+                                                                              \
+        _Pragma("GCC diagnostic push");                                       \
+        _Pragma("GCC diagnostic ignored \"-Wimplicit-function-declaration\"")
 
 #define test(f)                                                               \
         printf("  %s\n", #f);                                                 \
         _failures += f();
 
 #define end()                                                                 \
+        _Pragma("GCC diagnostic pop");                                        \
+                                                                              \
         printf("%s\n", _failures ? "FAIL" : "PASS");                          \
         return _failures;
 

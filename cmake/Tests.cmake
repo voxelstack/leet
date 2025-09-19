@@ -9,9 +9,6 @@ function(leet_test SOURCE)
 
     add_executable(${BINARY} ${SOURCE})
     target_link_libraries(${BINARY} PRIVATE leet)
-    # Test macros execute functions that are defined at the end of the file.
-    # Test functions always return int and have no arguments.
-    target_compile_options(${BINARY} PRIVATE "-Wno-implicit-function-declaration")
 
     add_test(
         ${BUILDER}

@@ -16,9 +16,6 @@ function(leet_benchmark SOURCE)
     add_executable(${TARGET} ${SOURCE})
     target_link_libraries(${TARGET} PRIVATE leet)
     target_compile_options(${TARGET} PRIVATE "-O0")
-    # Benchmark macros execute functions that are defined at the end of the file.
-    # Benchmark functions always return int and have no arguments.
-    target_compile_options(${TARGET} PRIVATE "-Wno-implicit-function-declaration")
 
     set(BENCHMARK_BINARY "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.exe")
     set(BENCHMARK_CSV "${BENCHMARK_OUTPUT_DIR}/${TARGET}.csv")

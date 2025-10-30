@@ -1,3 +1,6 @@
+author = "voxelstack"
+email = "voxelstack@gmail.com"
+repository = "https://github.com/voxelstack/leet"
 editor = "code.cmd"
 compiler = "gcc"
 

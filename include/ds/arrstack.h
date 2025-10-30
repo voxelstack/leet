@@ -28,7 +28,7 @@
  * @param el_size Size of each element.
  * @param el_no Number of elements for the initial allocation.
  */
-void arrstack_make(struct slice* p, size_t el_size, size_t el_no)
+struct slice* arrstack_make(size_t el_size, size_t el_no)
     __attribute__((alias("slice_make")));
 
 /**
@@ -47,7 +47,7 @@ void arrstack_del(struct slice* p) __attribute__((alias("slice_del")));
  * @param p Handle to the slice.
  * @return Non-zero if the stack is empty.
  */
-int arrstack_empty(struct slice* p) __attribute__((alias("slice_empty")));
+bool arrstack_empty(struct slice* p) __attribute__((alias("slice_empty")));
 
 /**
  * @brief Pushes a value to the top of the stack *without checking its
@@ -85,11 +85,7 @@ void arrstack_spush(struct slice* p, void* el)
  *
  * @param p Handle to the slice.
  */
-void*
-arrstack_peek(struct slice* p)
-{
-        return p->_data + p->_ptr - p->_el_size;
-}
+data* arrstack_peek(struct slice* p) __attribute__((alias("slice_last")));
 
 /**
  * @brief Pops and returns the value at top of the stack.
@@ -104,9 +100,11 @@ arrstack_peek(struct slice* p)
  * @param dst Handle to *allocated* memory to hold the popped element.
  */
 void
-arrstack_pop(struct slice* p, void* dst)
+arrstack_pop(struct slice* p, data* dst)
 {
-        memcpy(dst, p->_data + p->_ptr - p->_el_size, p->_el_size);
+        struct _slice* h = (struct _slice*)p;
+
+        memcpy(dst, slice_last(p), h->el_size);
         slice_rwd(p, 1);
 }
 

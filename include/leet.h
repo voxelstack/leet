@@ -9,3 +9,4 @@
 #include <string.h>
 
 typedef unsigned char byte;
+typedef void data;

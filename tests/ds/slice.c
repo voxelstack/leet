@@ -14,6 +14,7 @@ main()
         test(sappend);
         test(insert);
         test(sinsert);
+        test(delete_at);
         test(rwd);
         test(clear);
         test(at);
@@ -26,17 +27,16 @@ make()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 2;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
 
-        slice_make(&s, el_size, el_no);
-
-        should(eq(s._capacity, el_size * el_no),
+        should(eq(h->capacity, el_size * el_no),
                "capacity was not initialized");
-        should(eq(s._el_size, el_size), "el_size was not initialized");
-        should(eq(s._ptr, 0), "ptr was not initialized");
-        should(!eq(s._data, NULL), "data was null");
+        should(eq(h->el_size, el_size), "el_size was not initialized");
+        should(eq(h->len, 0), "len was not initialized");
+        should(!eq(h->data, NULL), "data was not allocated");
 
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -45,16 +45,17 @@ empty()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 1;
-        struct slice s;
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
+
+        should(slice_empty(s), "empty was false for empty slice");
+
         char el = 'c';
+        slice_append(s, &el);
 
-        slice_make(&s, el_size, el_no);
-        should(slice_empty(&s), "empty was false for empty slice");
+        should(!slice_empty(s), "empty was true for non-empty slice");
 
-        slice_append(&s, &el);
-        should(!slice_empty(&s), "empty was true for non-empty slice");
-
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -63,15 +64,14 @@ resize()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 2;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
+        slice_resize(s);
 
-        slice_make(&s, el_size, el_no);
-        slice_resize(&s);
-
-        should(eq(s._capacity, el_size * el_no * _SLICE_SCALE_FACTOR),
+        should(eq(h->capacity, el_size * el_no * _SLICE_SCALE_FACTOR),
                "capacity was not scaled by scale factor");
 
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -80,16 +80,16 @@ append()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 2;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
+
         char el = 'c';
+        slice_append(s, &el);
 
-        slice_make(&s, el_size, el_no);
-        slice_append(&s, &el);
+        should(eq(*h->data, el), "element was not pushed");
+        should(eq(h->len, 1), "len was not updated");
 
-        should(eq(*s._data, el), "element was not pushed");
-        should(eq(s._ptr, el_size), "ptr was not advanced");
-
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -98,20 +98,20 @@ sappend()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 1;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
+
         char el = 'c';
+        slice_sappend(s, &el);
 
-        slice_make(&s, el_size, el_no);
-        slice_sappend(&s, &el);
+        should(eq(*h->data, el), "element was not pushed");
+        should(eq(h->len, 1), "len was not updated");
 
-        should(eq(*s._data, el), "element was not pushed");
-        should(eq(s._ptr, el_size), "ptr was not advanced");
-
-        slice_sappend(&s, &el);
-        should(eq(s._capacity, el_no * _SLICE_SCALE_FACTOR),
+        slice_sappend(s, &el);
+        should(eq(h->capacity, el_no * _SLICE_SCALE_FACTOR),
                "slice was not resized");
 
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -120,21 +120,21 @@ insert()
 {
         size_t el_size = sizeof(int);
         size_t el_no = 5;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         int el = 0;
         int res[] = { 1, 2, 0, 3, 4 };
 
-        slice_make(&s, el_size, el_no);
         for (int i = 1; i <= 4; ++i)
-                slice_append(&s, &i);
-        slice_insert(&s, &el, 2);
+                slice_append(s, &i);
+        slice_insert(s, &el, 2);
 
         for (int i = 0; i < 5; ++i)
-                should(eq(*(int*)slice_at(&s, i), res[i]),
+                should(eq(*(int*)slice_at(s, i), res[i]),
                        "element order was incorrect");
-        should(eq(s._ptr, 5 * el_size), "ptr was not advanced");
+        should(eq(h->len, 5), "len was not updated");
 
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -143,23 +143,51 @@ sinsert()
 {
         size_t el_size = sizeof(int);
         size_t el_no = 4;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         int el = 0;
         int res[] = { 1, 2, 0, 3, 4 };
 
-        slice_make(&s, el_size, el_no);
         for (int i = 1; i <= 4; ++i)
-                slice_append(&s, &i);
-        slice_sinsert(&s, &el, 2);
+                slice_append(s, &i);
+        slice_sinsert(s, &el, 2);
 
         for (int i = 0; i < 5; ++i)
-                should(eq(*(int*)slice_at(&s, i), res[i]),
+                should(eq(*(int*)slice_at(s, i), res[i]),
                        "element order was incorrect");
-        should(eq(s._ptr, 5 * el_size), "ptr was not advanced");
-        should(eq(s._capacity, el_no * el_size * _SLICE_SCALE_FACTOR),
+        should(eq(h->len, 5), "len was not updated");
+        should(eq(h->capacity, el_no * el_size * _SLICE_SCALE_FACTOR),
                "slice was not resized");
 
-        slice_del(&s);
+        slice_del(s);
+        return 0;
+}
+
+int
+delete_at()
+{
+        size_t el_size = sizeof(int);
+        size_t el_no = 5;
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
+        int el = 0;
+        int res[] = { 0, 1, 3, 4 };
+
+        for (int i = 0; i < 5; ++i)
+        {
+                slice_append(s, &i);
+        }
+
+        slice_delete_at(s, 2);
+
+        for (int i = 0; i < 4; ++i)
+        {
+                should(eq(*(int*)slice_at(s, i), res[i]),
+                       "element order was incorrect");
+        }
+        should(eq(h->len, 4), "len was not updated");
+
+        slice_del(s);
         return 0;
 }
 
@@ -168,17 +196,17 @@ rwd()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 2;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         char el = 'c';
 
-        slice_make(&s, el_size, el_no);
-        slice_append(&s, &el);
-        slice_append(&s, &el);
+        slice_append(s, &el);
+        slice_append(s, &el);
 
-        slice_rwd(&s, 2);
-        should(eq(s._ptr, 0), "ptr was not rewinded");
+        slice_rwd(s, 2);
+        should(eq(h->len, 0), "len was not updated");
 
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -187,16 +215,16 @@ clear()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 1;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         char el = 'c';
 
-        slice_make(&s, el_size, el_no);
-        slice_append(&s, &el);
+        slice_append(s, &el);
 
-        slice_clear(&s);
-        should(eq(s._ptr, 0), "ptr was not rewinded");
+        slice_clear(s);
+        should(eq(h->len, 0), "len was not updated");
 
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }
 
@@ -205,22 +233,22 @@ at()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 2;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         char el0 = 'c';
         char el1 = 'd';
 
-        slice_make(&s, el_size, el_no);
-        slice_append(&s, &el0);
-        slice_append(&s, &el1);
+        slice_append(s, &el0);
+        slice_append(s, &el1);
 
         char* dst;
 
-        dst = slice_at(&s, 0);
+        dst = slice_at(s, 0);
         should(eq(*dst, el0), "returned value was not element at index");
 
-        dst = slice_at(&s, 0);
+        dst = slice_at(s, 0);
         should(eq(*dst, el0), "returned value was not element at index");
 
-        slice_del(&s);
+        slice_del(s);
         return 0;
 }

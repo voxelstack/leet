@@ -77,10 +77,9 @@ main()
         char op[8];
         char val;
 
-        struct slice out = { 0 };
         struct bstree* root = NULL;
+        struct slice* out = slice_make(sizeof(char), 512);
 
-        slice_make(&out, sizeof(char), 512);
         while (fgets(in, sizeof(in), stdin))
         {
                 // If the line we just read only has one word, it must be a
@@ -94,17 +93,17 @@ main()
                          * whole word: I[N]FIXA, P[R]EFIXA, P[O]SFIXA
                          */
                         if (op[1] == 'N')
-                                infix(root, &out);
+                                infix(root, out);
                         else if (op[1] == 'O')
-                                postfix(root, &out);
+                                postfix(root, out);
                         else
-                                prefix(root, &out);
+                                prefix(root, out);
 
                         // Trim final whitespace.
-                        out._data[out._ptr - 1] = '\0';
+                        out->data[out->len - 1] = '\0';
 
-                        printf("%s\n", out._data);
-                        slice_clear(&out);
+                        printf("%s\n", out->data);
+                        slice_clear(out);
                 }
                 else
                 {
@@ -124,7 +123,7 @@ main()
                         }
                 }
         };
-        slice_del(&out);
+        slice_del(out);
         tree_del(root);
 
         return 0;

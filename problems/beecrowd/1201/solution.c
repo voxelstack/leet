@@ -31,7 +31,7 @@ infix(struct bstree* root, struct slice* out)
 
         infix(root->_left, out);
         unsigned int value = container_of(root, struct holder, bst)->data;
-        out->_ptr += sprintf(out->_data + out->_ptr, "%u ", value);
+        out->len += sprintf(out->data + out->len, "%u ", value);
         infix(root->_right, out);
 }
 
@@ -42,7 +42,7 @@ prefix(struct bstree* root, struct slice* out)
                 return;
 
         unsigned int value = container_of(root, struct holder, bst)->data;
-        out->_ptr += sprintf(out->_data + out->_ptr, "%u ", value);
+        out->len += sprintf(out->data + out->len, "%u ", value);
         prefix(root->_left, out);
         prefix(root->_right, out);
 }
@@ -56,7 +56,7 @@ postfix(struct bstree* root, struct slice* out)
         postfix(root->_left, out);
         postfix(root->_right, out);
         unsigned int value = container_of(root, struct holder, bst)->data;
-        out->_ptr += sprintf(out->_data + out->_ptr, "%u ", value);
+        out->len += sprintf(out->data + out->len, "%u ", value);
 }
 
 void
@@ -111,10 +111,10 @@ main()
         char op[8];
         unsigned int val;
 
-        struct slice out = { 0 };
+        struct slice* out = slice_make(sizeof(char), 512);
+        ;
         struct bstree* root = NULL;
 
-        slice_make(&out, sizeof(char), 512);
         while (fgets(in, sizeof(in), stdin))
         {
                 // If the line we just read only has one word, it must be a
@@ -127,17 +127,17 @@ main()
                          * whole word: I[N]FIXA, P[R]EFIXA, P[O]SFIXA
                          */
                         if (op[1] == 'N')
-                                infix(root, &out);
+                                infix(root, out);
                         else if (op[1] == 'O')
-                                postfix(root, &out);
+                                postfix(root, out);
                         else
-                                prefix(root, &out);
+                                prefix(root, out);
 
                         // Trim final whitespace.
-                        out._data[out._ptr - 1] = '\0';
+                        out->data[out->len - 1] = '\0';
 
-                        printf("%s\n", out._data);
-                        slice_clear(&out);
+                        printf("%s\n", out->data);
+                        slice_clear(out);
                 }
                 else
                 {
@@ -164,7 +164,7 @@ main()
                         }
                 }
         };
-        slice_del(&out);
+        slice_del(out);
         tree_del(root);
 
         return 0;

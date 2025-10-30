@@ -19,17 +19,17 @@ peek()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 1;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         char el = 'c';
 
-        arrstack_make(&s, el_size, el_no);
-        arrstack_push(&s, &el);
+        arrstack_push(s, &el);
 
-        char* dst = arrstack_peek(&s);
+        char* dst = arrstack_peek(s);
         should(eq(*dst, el), "returned value was not the top of the stack");
-        should(eq(s._ptr, el_size), "ptr was changed");
+        should(eq(s->len, 1), "ptr was changed");
 
-        arrstack_del(&s);
+        arrstack_del(s);
         return 0;
 }
 
@@ -38,18 +38,18 @@ pop()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 1;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         char el = 'c';
         char dst;
 
-        arrstack_make(&s, el_size, el_no);
-        arrstack_push(&s, &el);
+        arrstack_push(s, &el);
 
-        arrstack_pop(&s, &dst);
+        arrstack_pop(s, &dst);
         should(eq(dst, el), "returned value was not the top of the stack");
-        should(eq(s._ptr, 0), "ptr was not rewinded");
+        should(eq(s->len, 0), "len was not updated");
 
-        arrstack_del(&s);
+        arrstack_del(s);
         return 0;
 }
 
@@ -58,16 +58,16 @@ rwd()
 {
         size_t el_size = sizeof(char);
         size_t el_no = 1;
-        struct slice s = { 0 };
+        struct slice* s = slice_make(el_size, el_no);
+        struct _slice* h = (struct _slice*)s;
         char el = 'c';
         char dst;
 
-        arrstack_make(&s, el_size, el_no);
-        arrstack_push(&s, &el);
+        arrstack_push(s, &el);
 
-        arrstack_rwd(&s);
-        should(eq(s._ptr, 0), "ptr was not rewinded");
+        arrstack_rwd(s);
+        should(eq(s->len, 0), "len was not updated");
 
-        arrstack_del(&s);
+        arrstack_del(s);
         return 0;
 }

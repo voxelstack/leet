@@ -57,10 +57,13 @@ void
 sort_merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*),
            size_t p, size_t r)
 {
-        assert(a->_capacity <= w->_capacity
+        struct _slice* ha = (struct _slice*)a;
+        struct _slice* hw = (struct _slice*)w;
+
+        assert(ha->capacity <= hw->capacity
                && "Work slice does not have enough space.");
         assert(
-            a->_el_size == w->_el_size
+            ha->el_size == hw->el_size
             && "Work slice element size does not match array element size.");
 
         if (p >= r)
@@ -76,11 +79,14 @@ void
 _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*), size_t p,
        size_t q, size_t r)
 {
+        struct _slice* ha = (struct _slice*)a;
+        struct _slice* hw = (struct _slice*)w;
+
         size_t nl = q - p + 1;
         size_t nr = r - q;
 
         // Copy both arrays to the work slice.
-        memcpy(slice_at(w, p), slice_at(a, p), (r - p + 1) * a->_el_size);
+        memcpy(slice_at(w, p), slice_at(a, p), (r - p + 1) * ha->el_size);
 
         size_t i = 0;
         size_t j = 0;
@@ -93,11 +99,11 @@ _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*), size_t p,
                 if (cmp(slice_at(w, i + p), slice_at(w, j + q + 1)) <= 0)
                         // a[k] = l[i]
                         memcpy(slice_at(a, k++), slice_at(w, i++ + p),
-                               a->_el_size);
+                               ha->el_size);
                 else
                         // a[k] = r[j]
                         memcpy(slice_at(a, k++), slice_at(w, j++ + q + 1),
-                               a->_el_size);
+                               ha->el_size);
         }
 
         if (i < nl)
@@ -109,11 +115,11 @@ _merge(struct slice* a, struct slice* w, int (*cmp)(void*, void*), size_t p,
                  * empty).
                  */
                 memcpy(slice_at(a, k), slice_at(w, i + p),
-                       a->_el_size * (nl - i));
+                       ha->el_size * (nl - i));
 
         if (j < nr)
                 // If there are elements left on the right array, copy them to
                 // the sorted array.
                 memcpy(slice_at(a, k), slice_at(w, j + q + 1),
-                       a->_el_size * (nr - j));
+                       ha->el_size * (nr - j));
 }

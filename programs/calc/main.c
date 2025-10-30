@@ -14,14 +14,14 @@ help()
 void
 bin_op(struct slice* s, char op)
 {
-        if (s->_ptr < s->_el_size * 2)
+        if (s->len < 2)
         {
                 printf("err\n");
                 return;
         }
 
-        int r = (int)s->_data[s->_ptr - s->_el_size];
-        int l = (int)s->_data[s->_ptr - s->_el_size * 2];
+        int r = *(int*)slice_at(s, s->len - 1);
+        int l = *(int*)slice_at(s, s->len - 2);
         int res;
 
         switch (op)
@@ -40,7 +40,7 @@ bin_op(struct slice* s, char op)
                 break;
         }
 
-        s->_ptr -= s->_el_size * 2;
+        slice_rwd(s, 2);
         arrstack_push(s, &res);
 }
 
@@ -51,8 +51,7 @@ main()
         char op;
         int val;
 
-        struct slice s = { 0 };
-        arrstack_make(&s, sizeof(int), 128);
+        struct slice* s = arrstack_make(sizeof(int), 128);
 
         printf("| h\n");
         help();
@@ -73,20 +72,20 @@ main()
                                 help();
                                 break;
                         case '>':
-                                if (arrstack_empty(&s))
+                                if (arrstack_empty(s))
                                 {
                                         printf("nil\n");
                                         continue;
                                 }
-                                int* p = arrstack_peek(&s);
+                                int* p = arrstack_peek(s);
                                 printf("%d\n", *p);
-                                arrstack_rwd(&s);
+                                arrstack_rwd(s);
                                 break;
                         case '+':
                         case '-':
                         case '*':
                         case '/':
-                                bin_op(&s, op);
+                                bin_op(s, op);
                                 break;
                         default:
                                 printf("err\n");
@@ -98,12 +97,12 @@ main()
                         switch (op)
                         {
                         case '<':
-                                if (s._ptr >= s._capacity)
+                                if (slice_full(s))
                                 {
                                         printf("full\n");
                                         continue;
                                 }
-                                arrstack_push(&s, &val);
+                                arrstack_push(s, &val);
                                 break;
                         default:
                                 printf("err\n");

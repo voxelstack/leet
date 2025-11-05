@@ -4,3 +4,4 @@ PointerAlignment: Left
 SpaceBeforeParens: ControlStatements
 BreakBeforeBraces: Allman
 SortIncludes: false
+InsertBraces: true

@@ -287,6 +287,26 @@ slice_sinsert(struct slice* p, data* el, size_t idx)
 }
 
 /**
+ * @brief Replaces the  value at the given position of the slice.
+ *
+ * Copies the element stored at `el` into the given position of the slice,
+ * overriding the existing element. *Does not* check if the index is out of
+ * bounds.
+ *
+ * @param p Handle to the slice.
+ * @param el Pointer to the element to insert.
+ * @param idx Index of the element to be replaced.
+ */
+void
+slice_replace(struct slice* p, data* el, size_t idx)
+{
+        struct _slice* h = (struct _slice*)p;
+
+        byte* ptr = slice_at(p, idx);
+        memcpy(ptr, el, h->el_size);
+}
+
+/**
  * @brief Deletes the element at a given position.
  *
  * Shifts existing elements to the right, overwriting the element to be
@@ -351,9 +371,8 @@ slice_clear(struct slice* p)
  * @param iterator Where to store the current element.
  * @param p Handle to the slice.
  */
-#define slice_foreach(type, iterator, p)                                                  \
-        for (                                                                             \
-                iterator = (type)((p)->data;                                              \
-                iterator < (type)((p)->data + (p)->len * ((struct _slice*)(p))->el_size); \
-                ++iterator                                                                \
-        )
+#define slice_foreach(type, iterator, p)                                      \
+        for (iterator = (type)(p)->data;                                      \
+             iterator                                                         \
+             < (p)->data + (p)->len * ((struct _slice*)(p))->el_size;         \
+             iterator = (byte*)iterator + ((struct _slice*)(p))->el_size)

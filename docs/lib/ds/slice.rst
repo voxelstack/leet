@@ -26,6 +26,7 @@ _________
 .. doxygenfunction:: slice_sappend
 .. doxygenfunction:: slice_insert
 .. doxygenfunction:: slice_sinsert
+.. doxygenfunction:: slice_replace
 .. doxygenfunction:: slice_delete_at
 .. doxygenfunction:: slice_delete_at_fast
 .. doxygenfunction:: slice_clear

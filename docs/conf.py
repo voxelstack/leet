@@ -13,7 +13,12 @@ author = 'voxelstack'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["breathe", "sphinx.ext.todo", "sphinx_charts.charts"]
+extensions = [
+    "breathe",
+    "sphinx.ext.todo",
+    "sphinx_charts.charts",
+    "sphinx.ext.graphviz"
+]
 
 # Breathe configuration
 breathe_default_project = "leet"
